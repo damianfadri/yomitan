@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="Yomitan.Component.Badge"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <Border BorderBrush="{Binding Color, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+            Background="{Binding Color, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+            BorderThickness="1" 
+            CornerRadius="3" 
+            Padding="5,2">
+        <TextBlock Text="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                   Foreground="{Binding ContrastColor, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+    </Border>
+</UserControl>
