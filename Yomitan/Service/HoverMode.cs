@@ -31,7 +31,16 @@ namespace Yomitan.Service
             _mouseTimer = new DispatcherTimer();
             _mouseTimer.Interval = TimeSpan.FromMilliseconds(SCAN_TEXT_INTERVAL_MS);
             _mouseTimer.Tick += ScanTextOnPointer;
+        }
+
+        public void Start()
+        {
             _mouseTimer.Start();
+        }
+
+        public void Stop()
+        {
+            _mouseTimer.Stop();
         }
 
         private void ScanTextOnPointer(object sender, EventArgs e)

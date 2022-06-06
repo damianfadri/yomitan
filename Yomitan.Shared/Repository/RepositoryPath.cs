@@ -14,5 +14,20 @@ namespace Yomitan.Shared.Repository
         }
 
         public RepositoryPath(string path) : this(path, IO.Path.GetFileNameWithoutExtension(path)) { }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is RepositoryPath))
+                return false;
+
+            RepositoryPath other = (RepositoryPath)obj;
+            return Name.Equals(other.Name)
+                    && Path.Equals(other.Path);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() + Path.GetHashCode();
+        }
     }
 }

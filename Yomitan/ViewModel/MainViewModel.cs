@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Yomitan.Service;
 using Yomitan.Shared.OCR;
 using Yomitan.Shared.Repository;
@@ -12,12 +13,25 @@ namespace Yomitan.ViewModel
 
     public class MainViewModel : ObservableRecipient
     {
+        private static readonly string[] _strRepositoryPaths = new string[]
+        {
+            @"D:\Desktop\jmdict_english",
+            @"D:\Desktop\kireicake",
+        };
+
         private ObservableCollection<RepositoryPath> _repositories;
+        private bool _isRepositoriesLoaded;
 
         public ObservableCollection<RepositoryPath> Repositories
         {
             get => _repositories;
-            set => SetProperty(ref _repositories, value, true);
+            set => SetProperty(ref _repositories, value);
+        }
+
+        public bool IsRepositoriesLoaded
+        {
+            get => _isRepositoriesLoaded;
+            set => SetProperty(ref _isRepositoriesLoaded, value);
         }
 
         public IAsyncRelayCommand LoadRepositoriesCommand { get; }
@@ -30,16 +44,38 @@ namespace Yomitan.ViewModel
         {
             _hoverMode = hoverMode;
             _hoverMode.Hovered += DisplaySearchResults;
+
             _termLookup = termLookup;
             _termDisplay = termDisplay;
 
             Repositories = new ObservableCollection<RepositoryPath>();
-            LoadRepositoriesCommand = new AsyncRelayCommand(async () =>
+            LoadRepositoriesCommand = new AsyncRelayCommand(async () => await LoadDictionaries());
+        }
+
+        private async Task LoadDictionaries()
+        {
+            StopServices();
+
+            foreach (string strRepositoryPath in _strRepositoryPaths)
             {
-                // TODO: Fetch in a configuration file.
-                await _termLookup.LoadAsync(new RepositoryPath(@"D:\Desktop\jmdict_english"));
-                await _termLookup.LoadAsync(new RepositoryPath(@"D:\Desktop\kireicake"));
-            });
+                RepositoryPath repositoryPath = new RepositoryPath(strRepositoryPath);
+                await _termLookup.LoadAsync(repositoryPath);
+                Repositories.Add(new RepositoryPath(strRepositoryPath));
+            }
+
+            StartServices();
+        }
+
+        private void StartServices()
+        {
+            IsRepositoriesLoaded = true;
+            _hoverMode?.Start();
+        }
+
+        private void StopServices()
+        {
+            IsRepositoriesLoaded = false;
+            _hoverMode?.Stop();
         }
 
         private void DisplaySearchResults(object sender, TextRegion e)

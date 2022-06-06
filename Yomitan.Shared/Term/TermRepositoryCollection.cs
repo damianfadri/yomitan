@@ -6,11 +6,11 @@ namespace Yomitan.Shared.Term
 {
     public class TermRepositoryCollection : IRepository<Term>
     {
-        private IDictionary<string, IRepository<Term>> _repositories;
+        private IDictionary<RepositoryPath, IRepository<Term>> _repositories;
 
         public TermRepositoryCollection()
         {
-            _repositories = new Dictionary<string, IRepository<Term>>();
+            _repositories = new Dictionary<RepositoryPath, IRepository<Term>>();
         }
 
         public IEnumerable<Term> FindAll()
@@ -23,12 +23,17 @@ namespace Yomitan.Shared.Term
             return _repositories.Values.SelectMany(repo => repo.FindBy(keyword));
         }
 
+        public void Unload(RepositoryPath source)
+        {
+            _repositories.Remove(source);
+        }
+
         public void Load(RepositoryPath source)
         {
             TermRepository termRepository = new TermRepository();
             termRepository.Load(source);
 
-            _repositories[source.Name] = termRepository;
+            _repositories[source] = termRepository;
         }
     }
 }

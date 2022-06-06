@@ -39,5 +39,10 @@ namespace Yomitan.Shared.Deinflect
 
             _rules = rules;
         }
+
+        public void Unload(RepositoryPath source)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

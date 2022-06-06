@@ -28,6 +28,11 @@ namespace Yomitan.Service
             await Task.Run(() => _termRepository.Load(repositoryPath));
         }
 
+        public async Task UnloadAsync(RepositoryPath repositoryPath)
+        {
+            await Task.Run(() => _termRepository.Unload(repositoryPath));
+        }
+
         public IEnumerable<Term> Search(string keyword)
         {
             string current = JapaneseUtils.ConvertKatakanaToHiragana(keyword);

@@ -44,6 +44,11 @@ namespace Yomitan.Shared.Term
                 yield return term;            
         }
 
+        public void Unload(RepositoryPath source)
+        {
+            _entries.Clear();
+        }
+
         public void Load(RepositoryPath source)
         {
             if (!Directory.Exists(source.Path))

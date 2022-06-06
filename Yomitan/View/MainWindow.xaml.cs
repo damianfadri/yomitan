@@ -39,7 +39,7 @@ namespace Yomitan.View
             ToggleWindow();
         }
 
-        private void OnWindowCLosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             _icon?.Dispose();
             _icon = null;

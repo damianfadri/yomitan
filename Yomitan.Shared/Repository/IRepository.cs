@@ -7,6 +7,8 @@ namespace Yomitan.Shared.Repository
     {
         void Load(RepositoryPath source);
 
+        void Unload(RepositoryPath source);
+
         IEnumerable<T> FindAll();
 
         IEnumerable<T> FindBy(string keyword);
