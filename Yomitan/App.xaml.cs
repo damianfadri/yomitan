@@ -1,15 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Windows;
-using Yomitan.Kanjitomo.OCR;
+using Yomitan.Core.Models.Deinflects;
+using Yomitan.Core.Services;
+using Yomitan.Models;
 using Yomitan.Service;
-using Yomitan.Shared.Deinflect;
-using Yomitan.Shared.OCR;
-using Yomitan.Shared.Repository;
-using Yomitan.Shared.Term;
-using Yomitan.Tesseract.OCR;
-using Yomitan.View;
+using Yomitan.Services.OCR;
+using Yomitan.Services.Terms;
 using Yomitan.ViewModel;
 
 namespace Yomitan
@@ -25,15 +22,21 @@ namespace Yomitan
         {
             Ioc.Default.ConfigureServices(
                 new ServiceCollection()
-                .AddSingleton<IDetector, KanjiTomoDetector>()
-                .AddSingleton<IRecognizer, TesseractRecognizer>()
-                .AddSingleton<IRepository<Term>, TermRepositoryCollection>()
-                .AddSingleton<IRepository<Rule>, RuleRepository>()
+                .AddSingleton<ITextDetector, KanjitomoTextDetector>()
+                .AddSingleton<ITextRecognizer, TesseractTextRecognizer>()
+                .AddSingleton<IBank<Rule>, RuleBank>(sp => 
+                {
+                    RuleBank ruleBank = new RuleBank();
+                    ruleBank.Load(@"D:\Desktop\deinflect.json");
+
+                    return ruleBank;
+                })
+                .AddSingleton<ITermSearchService, TermSearchService>()
+                .AddSingleton<ITermDisplayService, TermDisplayService>()
+                .AddTransient<ITermBankService, TermBankService>()
                 .AddTransient<HoverMode>()
-                .AddTransient<TermLookupService>()
-                .AddTransient<TermDisplayService>()
                 .AddTransient<MainViewModel>()
-                .AddTransient<TermDisplayViewModel>()
+                .AddTransient<SearchResultsViewModel>()
                 .BuildServiceProvider());
 
             InitializeComponent();

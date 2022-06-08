@@ -5,11 +5,7 @@ VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yomitan", "Yomitan\Yomitan.csproj", "{C8ED65D6-9DC6-43D6-81E2-068DEE85A6BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yomitan.Shared", "Yomitan.Shared\Yomitan.Shared.csproj", "{9D5265B0-48ED-43C9-BDD9-0E59C7812F04}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yomitan.Tesseract", "Yomitan.Tesseract\Yomitan.Tesseract.csproj", "{13577C87-C414-4CFD-A7B0-527241213255}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yomitan.Kanjitomo", "Yomitan.Kanjitomo\Yomitan.Kanjitomo.csproj", "{2D6A7C66-353D-44AD-BAD8-8845C05BBD6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yomitan.Core", "Yomitan.Core\Yomitan.Core.csproj", "{9B07FE56-867E-4045-A88B-C37195ED9CB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,30 +23,14 @@ Global
 		{C8ED65D6-9DC6-43D6-81E2-068DEE85A6BD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C8ED65D6-9DC6-43D6-81E2-068DEE85A6BD}.Release|x64.ActiveCfg = Release|x64
 		{C8ED65D6-9DC6-43D6-81E2-068DEE85A6BD}.Release|x64.Build.0 = Release|x64
-		{9D5265B0-48ED-43C9-BDD9-0E59C7812F04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D5265B0-48ED-43C9-BDD9-0E59C7812F04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D5265B0-48ED-43C9-BDD9-0E59C7812F04}.Debug|x64.ActiveCfg = Debug|x64
-		{9D5265B0-48ED-43C9-BDD9-0E59C7812F04}.Debug|x64.Build.0 = Debug|x64
-		{9D5265B0-48ED-43C9-BDD9-0E59C7812F04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D5265B0-48ED-43C9-BDD9-0E59C7812F04}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D5265B0-48ED-43C9-BDD9-0E59C7812F04}.Release|x64.ActiveCfg = Release|x64
-		{9D5265B0-48ED-43C9-BDD9-0E59C7812F04}.Release|x64.Build.0 = Release|x64
-		{13577C87-C414-4CFD-A7B0-527241213255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13577C87-C414-4CFD-A7B0-527241213255}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13577C87-C414-4CFD-A7B0-527241213255}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{13577C87-C414-4CFD-A7B0-527241213255}.Debug|x64.Build.0 = Debug|Any CPU
-		{13577C87-C414-4CFD-A7B0-527241213255}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13577C87-C414-4CFD-A7B0-527241213255}.Release|Any CPU.Build.0 = Release|Any CPU
-		{13577C87-C414-4CFD-A7B0-527241213255}.Release|x64.ActiveCfg = Release|Any CPU
-		{13577C87-C414-4CFD-A7B0-527241213255}.Release|x64.Build.0 = Release|Any CPU
-		{2D6A7C66-353D-44AD-BAD8-8845C05BBD6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D6A7C66-353D-44AD-BAD8-8845C05BBD6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D6A7C66-353D-44AD-BAD8-8845C05BBD6B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2D6A7C66-353D-44AD-BAD8-8845C05BBD6B}.Debug|x64.Build.0 = Debug|Any CPU
-		{2D6A7C66-353D-44AD-BAD8-8845C05BBD6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D6A7C66-353D-44AD-BAD8-8845C05BBD6B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D6A7C66-353D-44AD-BAD8-8845C05BBD6B}.Release|x64.ActiveCfg = Release|Any CPU
-		{2D6A7C66-353D-44AD-BAD8-8845C05BBD6B}.Release|x64.Build.0 = Release|Any CPU
+		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Debug|x64.Build.0 = Debug|Any CPU
+		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Release|x64.ActiveCfg = Release|Any CPU
+		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

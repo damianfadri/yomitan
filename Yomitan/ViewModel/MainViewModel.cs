@@ -1,87 +1,110 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using log4net;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Yomitan.Core.Models.OCR;
+using Yomitan.Core.Models.Terms;
+using Yomitan.Core.Services;
+using Yomitan.Models;
 using Yomitan.Service;
-using Yomitan.Shared.OCR;
-using Yomitan.Shared.Repository;
-using Yomitan.Shared.Term;
 
 namespace Yomitan.ViewModel
 {
 
     public class MainViewModel : ObservableRecipient
     {
-        private static readonly string[] _strRepositoryPaths = new string[]
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        private static readonly string[] _strTermBankPaths = new string[]
         {
             @"D:\Desktop\jmdict_english",
             @"D:\Desktop\kireicake",
         };
 
-        private ObservableCollection<RepositoryPath> _repositories;
-        private bool _isRepositoriesLoaded;
+        private ObservableCollection<TermBank> _termBanks;
+        private bool _isTermBanksLoaded;
 
-        public ObservableCollection<RepositoryPath> Repositories
+        public ObservableCollection<TermBank> TermBanks
         {
-            get => _repositories;
-            set => SetProperty(ref _repositories, value);
+            get => _termBanks;
+            set => SetProperty(ref _termBanks, value);
         }
 
-        public bool IsRepositoriesLoaded
+        public bool IsTermBanksLoaded
         {
-            get => _isRepositoriesLoaded;
-            set => SetProperty(ref _isRepositoriesLoaded, value);
+            get => _isTermBanksLoaded;
+            set => SetProperty(ref _isTermBanksLoaded, value);
         }
 
-        public IAsyncRelayCommand LoadRepositoriesCommand { get; }
+        public IAsyncRelayCommand LoadTermBanksCommand { get; }
+        public IAsyncRelayCommand ImportTermBankCommand { get; }
 
         private readonly HoverMode _hoverMode;
-        private readonly TermLookupService _termLookup;
-        private readonly TermDisplayService _termDisplay;
+        private readonly ITermSearchService _termSearch;
+        private readonly ITermDisplayService _termDisplay;
+        private readonly ITermBankService _termBankService;
 
-        public MainViewModel(HoverMode hoverMode, TermLookupService termLookup, TermDisplayService termDisplay) 
+        public MainViewModel(HoverMode hoverMode, ITermSearchService termSearchService, ITermDisplayService termDisplayService, ITermBankService termBankService)
         {
             _hoverMode = hoverMode;
             _hoverMode.Hovered += DisplaySearchResults;
 
-            _termLookup = termLookup;
-            _termDisplay = termDisplay;
+            _termSearch = termSearchService;
+            _termDisplay = termDisplayService;
+            _termBankService = termBankService;
 
-            Repositories = new ObservableCollection<RepositoryPath>();
-            LoadRepositoriesCommand = new AsyncRelayCommand(async () => await LoadDictionaries());
+            TermBanks = new ObservableCollection<TermBank>();
+            LoadTermBanksCommand = new AsyncRelayCommand(async () => await LoadTermBanks());
+            ImportTermBankCommand = new AsyncRelayCommand(async () => await ImportTermBank());
         }
 
-        private async Task LoadDictionaries()
+        private async Task ImportTermBank()
+        {
+            string extractedTermBankPath = _termBankService.Import();
+            if (string.IsNullOrWhiteSpace(extractedTermBankPath))
+                return;
+
+            await ImportTermBank(extractedTermBankPath);
+        }
+
+        private async Task ImportTermBank(string termBankPath)
+        {
+            TermBank termBank = await TermBank.LoadAsync(termBankPath);
+            TermBanks.Add(termBank);
+
+            _termSearch.Add(termBank.Info.Title, termBank.FindAll());
+        }
+
+        private async Task LoadTermBanks()
         {
             StopServices();
 
-            foreach (string strRepositoryPath in _strRepositoryPaths)
-            {
-                RepositoryPath repositoryPath = new RepositoryPath(strRepositoryPath);
-                await _termLookup.LoadAsync(repositoryPath);
-                Repositories.Add(new RepositoryPath(strRepositoryPath));
-            }
+
+            foreach (string termBankPath in _strTermBankPaths)
+                await ImportTermBank(termBankPath);
 
             StartServices();
         }
 
         private void StartServices()
         {
-            IsRepositoriesLoaded = true;
+            IsTermBanksLoaded = true;
             _hoverMode?.Start();
         }
 
         private void StopServices()
         {
-            IsRepositoriesLoaded = false;
+            IsTermBanksLoaded = false;
             _hoverMode?.Stop();
         }
 
-        private void DisplaySearchResults(object sender, TextRegion e)
+        private void DisplaySearchResults(object _, TextRegion e)
         {
-            IEnumerable<Term> results = _termLookup.Search(e.Text);
-            _termDisplay.Display(results, e);
+            IEnumerable<Term> results = _termSearch.Search(e.Text);
+            
+            _termDisplay.Display(results, e.Bounds);
         }
     }
 }

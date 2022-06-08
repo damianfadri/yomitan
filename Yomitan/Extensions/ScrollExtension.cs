@@ -22,9 +22,8 @@ namespace Yomitan.Extensions
         {
             var scrollViewer = d as ScrollViewer;
             if (scrollViewer == null)
-            {
                 return;
-            }
+
             if ((bool)e.NewValue)
             {
                 scrollViewer.ScrollToTop();
