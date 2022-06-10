@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yomitan", "Yomitan\Yomitan.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yomitan.Core", "Yomitan.Core\Yomitan.Core.csproj", "{9B07FE56-867E-4045-A88B-C37195ED9CB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yomitan.Tests", "Yomitan.Tests\Yomitan.Tests.csproj", "{B0793353-5757-4F36-8FAF-0643C1361C38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Release|x64.ActiveCfg = Release|Any CPU
 		{9B07FE56-867E-4045-A88B-C37195ED9CB4}.Release|x64.Build.0 = Release|Any CPU
+		{B0793353-5757-4F36-8FAF-0643C1361C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0793353-5757-4F36-8FAF-0643C1361C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0793353-5757-4F36-8FAF-0643C1361C38}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0793353-5757-4F36-8FAF-0643C1361C38}.Debug|x64.Build.0 = Debug|Any CPU
+		{B0793353-5757-4F36-8FAF-0643C1361C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0793353-5757-4F36-8FAF-0643C1361C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0793353-5757-4F36-8FAF-0643C1361C38}.Release|x64.ActiveCfg = Release|Any CPU
+		{B0793353-5757-4F36-8FAF-0643C1361C38}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
