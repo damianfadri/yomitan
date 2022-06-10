@@ -45,12 +45,6 @@ namespace Yomitan.Core.Models.Terms
 
         private IEnumerable<Kanji> GetSegments(string expression, string reading)
         {
-            if (JapaneseHelper.IsKana(expression))
-            {
-                yield return new Kanji(expression);
-                yield break;
-            }
-
             StringBuilder pattern = new StringBuilder();
             IList<string> expressionSegment = JapaneseHelper.Segment(expression).ToList();
 

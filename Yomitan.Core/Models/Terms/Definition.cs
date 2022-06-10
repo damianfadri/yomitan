@@ -8,9 +8,6 @@ namespace Yomitan.Core.Models.Terms
         public IEnumerable<DefinitionText> Definitions { get; set; }
         public Tag Source { get; set; }
 
-        public Definition()
-        {
-
-        }
+        public Definition() { }
     }
 }
