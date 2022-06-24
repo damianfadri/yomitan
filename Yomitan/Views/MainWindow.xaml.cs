@@ -11,35 +11,14 @@ namespace Yomitan.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private NotifyIcon _icon;
-
         public MainViewModel ViewModel => (MainViewModel)DataContext;
 
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = Ioc.Default.GetService<MainViewModel>();
-
             MoveWindowToCorner();
 
-            _icon = new NotifyIcon();
-            _icon.BalloonTipText = "The app has been minimized";
-            _icon.BalloonTipTitle = "Yomitan";
-            _icon.Text = "Yomitan";
-            _icon.Icon = new System.Drawing.Icon(@"D:\Downloads\icon128.ico");
-            _icon.Click += OnIconClick;
-            _icon.Visible = true;
-        }
-
-        private void OnIconClick(object sender, EventArgs e)
-        {
-            ToggleWindow();
-        }
-
-        private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            _icon?.Dispose();
-            _icon = null;
+            DataContext = Ioc.Default.GetService<MainViewModel>();
         }
 
         private void OnWindowContentRendered(object sender, EventArgs e)
@@ -53,12 +32,9 @@ namespace Yomitan.Views
             Top = SystemParameters.WorkArea.Height - Height;
         }
 
-        private void ToggleWindow()
+        private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (IsVisible)
-                Hide();
-            else
-                Show();
+            ViewModel.Dispose();
         }
     }
 }

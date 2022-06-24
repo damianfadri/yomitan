@@ -1,8 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using log4net;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Yomitan.Core.Models.Terms;
+using System.Linq;
+using System.Threading.Tasks;
+using Yomitan.Contracts;
+using Yomitan.Core.Models;
 
 namespace Yomitan.ViewModel
 {
@@ -10,10 +14,12 @@ namespace Yomitan.ViewModel
     {
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private ObservableCollection<Term> _terms;
+        private readonly ITagColorService _tagColorService;
+
+        private ObservableCollection<TermViewModel> _terms;
         private bool _hasNewTerms;
 
-        public ObservableCollection<Term> Terms
+        public ObservableCollection<TermViewModel> Terms
         {
             get => _terms;
             private set => SetProperty(ref _terms, value);
@@ -25,15 +31,26 @@ namespace Yomitan.ViewModel
             set => SetProperty(ref _hasNewTerms, value);
         }
 
-        public SearchResultsViewModel()
+        public IAsyncRelayCommand InitializeServicesCommand { get; }
+
+        public SearchResultsViewModel(ITagColorService tagColorService)
         {
-            Terms = new ObservableCollection<Term>();
+            _tagColorService = tagColorService;
+
+            Terms = new ObservableCollection<TermViewModel>();
+            InitializeServicesCommand = new AsyncRelayCommand(InitializeServices);
+        }
+
+        private async Task InitializeServices()
+        {
+            if (!_tagColorService.Loaded)
+                await _tagColorService.InitializeAsync();
         }
 
         public void LoadTerms(IEnumerable<Term> terms)
         {
             Terms.Clear();
-            foreach (Term term in terms)
+            foreach (var term in terms.Select(t => new TermViewModel(t)))
                 Terms.Add(term);
 
             HasNewTerms = true;

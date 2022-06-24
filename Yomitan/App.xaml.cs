@@ -1,12 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
-using Yomitan.Core.Models.Deinflects;
-using Yomitan.Core.Services;
-using Yomitan.Models;
+using Yomitan.Contracts;
+using Yomitan.Core.Contracts;
 using Yomitan.Service;
-using Yomitan.Services.OCR;
-using Yomitan.Services.Terms;
+using Yomitan.Services;
 using Yomitan.ViewModel;
 
 namespace Yomitan
@@ -20,26 +18,26 @@ namespace Yomitan
 
         public App()
         {
-            Ioc.Default.ConfigureServices(
-                new ServiceCollection()
-                .AddSingleton<ITextDetector, KanjitomoTextDetector>()
-                .AddSingleton<ITextRecognizer, TesseractTextRecognizer>()
-                .AddSingleton<IBank<Rule>, RuleBank>(sp => 
-                {
-                    RuleBank ruleBank = new RuleBank();
-                    ruleBank.Load(@"D:\Desktop\deinflect.json");
-
-                    return ruleBank;
-                })
-                .AddSingleton<ITermSearchService, TermSearchService>()
-                .AddSingleton<ITermDisplayService, TermDisplayService>()
-                .AddTransient<ITermBankService, TermBankService>()
-                .AddTransient<HoverMode>()
-                .AddTransient<MainViewModel>()
-                .AddTransient<SearchResultsViewModel>()
-                .BuildServiceProvider());
-
             InitializeComponent();
+            ConfigureServices();
+        }
+
+        private void ConfigureServices()
+        {
+            Ioc.Default.ConfigureServices(
+                    new ServiceCollection()
+                    .AddSingleton<ITagColorService, TagColorService>()
+                    .AddSingleton<IRuleBankService, RuleBankService>()
+                    .AddSingleton<ITermBankService, TermBankService>()
+                    .AddSingleton<ITermSearchService, TermSearchService>()
+                    .AddSingleton<ITermDisplayService, TermDisplayService>()
+                    .AddSingleton<ITextDetector, KanjitomoTextDetector>()
+                    .AddSingleton<ITextRecognizer, TesseractTextRecognizer>()
+
+                    .AddTransient<HoverMode>()
+                    .AddTransient<MainViewModel>()
+                    .AddTransient<SearchResultsViewModel>()
+                    .BuildServiceProvider());
         }
     }
 }

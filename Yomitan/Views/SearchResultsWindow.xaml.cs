@@ -13,6 +13,7 @@ namespace Yomitan.Views
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public SearchResultsViewModel ViewModel => (SearchResultsViewModel)DataContext;
+        public bool IsClosed { get; private set; }
 
         public SearchResultsWindow()
         {
@@ -20,11 +21,10 @@ namespace Yomitan.Views
             DataContext = Ioc.Default.GetService<SearchResultsViewModel>();
         }
 
-        private void OnWindowCLosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Prevent closing.
-            e.Cancel = true;
-            Hide();
+            Logger.Debug("Closing SearchResultWindow...");
+            IsClosed = true;
         }
     }
 }

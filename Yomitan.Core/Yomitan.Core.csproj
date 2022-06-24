@@ -43,28 +43,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\JapaneseHelper.cs" />
+    <Compile Include="Contracts\ILoadable.cs" />
+    <Compile Include="Contracts\ILoadingStrategy.cs" />
+    <Compile Include="Contracts\IRepository.cs" />
+    <Compile Include="Contracts\IRuleBankService.cs" />
+    <Compile Include="Contracts\IService.cs" />
+    <Compile Include="Contracts\ITermBankService.cs" />
+    <Compile Include="Contracts\ITermDisplayService.cs" />
+    <Compile Include="Contracts\ITermSearchService.cs" />
+    <Compile Include="Contracts\ITextDetector.cs" />
+    <Compile Include="Contracts\ITextRecognizer.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Helpers\NihongoHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
-    <Compile Include="Models\Deinflects\Deinflection.cs" />
-    <Compile Include="Models\OCR\ImageSource.cs" />
-    <Compile Include="Models\Deinflects\Rule.cs" />
-    <Compile Include="Models\Deinflects\RuleType.cs" />
-    <Compile Include="Models\Deinflects\RuleVariant.cs" />
-    <Compile Include="Models\Terms\Definition.cs" />
-    <Compile Include="Models\Terms\DefinitionText.cs" />
-    <Compile Include="Models\Terms\Expression.cs" />
-    <Compile Include="Models\Terms\Kanji.cs" />
-    <Compile Include="Models\Terms\Tag.cs" />
-    <Compile Include="Models\Terms\Term.cs" />
-    <Compile Include="Models\OCR\TextRegion.cs" />
+    <Compile Include="Models\Definition.cs" />
+    <Compile Include="Models\DefinitionEntry.cs" />
+    <Compile Include="Models\Deinflection.cs" />
+    <Compile Include="Models\ImageSource.cs" />
+    <Compile Include="Models\Rule.cs" />
+    <Compile Include="Models\RuleType.cs" />
+    <Compile Include="Models\RuleVariant.cs" />
+    <Compile Include="Models\Tag.cs" />
+    <Compile Include="Models\Term.cs" />
+    <Compile Include="Models\TermBank.cs" />
+    <Compile Include="Models\TextRegion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IBank.cs" />
-    <Compile Include="Services\IExtractor.cs" />
-    <Compile Include="Services\ITermDisplayService.cs" />
-    <Compile Include="Services\ITextDetector.cs" />
-    <Compile Include="Services\ITermBankService.cs" />
-    <Compile Include="Services\ITermSearchService.cs" />
-    <Compile Include="Services\ITextRecognizer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,110 +1,98 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using log4net;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Yomitan.Core.Models.OCR;
-using Yomitan.Core.Models.Terms;
-using Yomitan.Core.Services;
-using Yomitan.Models;
+using Yomitan.Core.Contracts;
+using Yomitan.Core.Models;
 using Yomitan.Service;
 
 namespace Yomitan.ViewModel
 {
-
-    public class MainViewModel : ObservableRecipient
+    public class MainViewModel : ObservableObject, IDisposable
     {
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private static readonly string[] _strTermBankPaths = new string[]
-        {
-            @"D:\Desktop\jmdict_english",
-            @"D:\Desktop\kireicake",
-        };
-
-        private ObservableCollection<TermBank> _termBanks;
-        private bool _isTermBanksLoaded;
-
-        public ObservableCollection<TermBank> TermBanks
-        {
-            get => _termBanks;
-            set => SetProperty(ref _termBanks, value);
-        }
-
-        public bool IsTermBanksLoaded
-        {
-            get => _isTermBanksLoaded;
-            set => SetProperty(ref _isTermBanksLoaded, value);
-        }
-
-        public IAsyncRelayCommand LoadTermBanksCommand { get; }
-        public IAsyncRelayCommand ImportTermBankCommand { get; }
-
-        private readonly HoverMode _hoverMode;
-        private readonly ITermSearchService _termSearch;
-        private readonly ITermDisplayService _termDisplay;
         private readonly ITermBankService _termBankService;
+        private readonly ITermSearchService _termSearchService;
+        private readonly ITermDisplayService _termDisplayService;
+        private readonly HoverMode _hoverMode;
 
-        public MainViewModel(HoverMode hoverMode, ITermSearchService termSearchService, ITermDisplayService termDisplayService, ITermBankService termBankService)
+        private ObservableCollection<TermBankViewModel> _dictionaries;
+
+        public ObservableCollection<TermBankViewModel> TermBanks
+        {
+            get => _dictionaries;
+            set => SetProperty(ref _dictionaries, value);
+        }
+
+        public IAsyncRelayCommand InitializeServicesCommand { get; }
+        public IAsyncRelayCommand<IEnumerable<string>> ImportTermBankCommand { get; }
+        public IRelayCommand<TermBankViewModel> ToggleTermBankCommand { get; }
+
+        public MainViewModel(HoverMode hoverMode, ITermBankService termBankService, ITermSearchService termSearchService, ITermDisplayService termDisplayService)
         {
             _hoverMode = hoverMode;
             _hoverMode.Hovered += DisplaySearchResults;
 
-            _termSearch = termSearchService;
-            _termDisplay = termDisplayService;
             _termBankService = termBankService;
+            _termSearchService = termSearchService;
+            _termDisplayService = termDisplayService;
 
-            TermBanks = new ObservableCollection<TermBank>();
-            LoadTermBanksCommand = new AsyncRelayCommand(async () => await LoadTermBanks());
-            ImportTermBankCommand = new AsyncRelayCommand(async () => await ImportTermBank());
+            InitializeServicesCommand = new AsyncRelayCommand(InitializeServicesAsync);
+            ToggleTermBankCommand = new RelayCommand<TermBankViewModel>(ToggleTermBank);
+            ImportTermBankCommand = new AsyncRelayCommand<IEnumerable<string>>(ImportTermBank);
+            TermBanks = new ObservableCollection<TermBankViewModel>();
         }
 
-        private async Task ImportTermBank()
+        private void DisplaySearchResults(object sender, TextRegion e)
         {
-            string extractedTermBankPath = _termBankService.Import();
-            if (string.IsNullOrWhiteSpace(extractedTermBankPath))
-                return;
-
-            await ImportTermBank(extractedTermBankPath);
+            IEnumerable<Term> results = _termSearchService.Search(e.Text);
+            _termDisplayService.Display(results, e.Bounds);
         }
 
-        private async Task ImportTermBank(string termBankPath)
+        private async Task ImportTermBank(IEnumerable<string> importFilepaths)
         {
-            TermBank termBank = await TermBank.LoadAsync(termBankPath);
-            TermBanks.Add(termBank);
-
-            _termSearch.Add(termBank.Info.Title, termBank.FindAll());
+            foreach (string importFilepath in importFilepaths)
+            {
+                var termBank = await _termBankService.LoadOneAsync(importFilepath);
+                CacheTermBank(termBank);
+            }
         }
 
-        private async Task LoadTermBanks()
+        private void ToggleTermBank(TermBankViewModel model)
         {
-            StopServices();
-
-
-            foreach (string termBankPath in _strTermBankPaths)
-                await ImportTermBank(termBankPath);
-
-            StartServices();
+            if (model.Enabled)
+                _termSearchService.Disable(model.Title);
+            else
+                _termSearchService.Enable(model.Title);
         }
 
-        private void StartServices()
+        private async Task InitializeServicesAsync()
         {
-            IsTermBanksLoaded = true;
-            _hoverMode?.Start();
+            if (!_termBankService.Loaded)
+                await _termBankService.InitializeAsync();
+
+            if (!_termSearchService.Loaded)
+                await _termSearchService.InitializeAsync();
+
+            foreach (var termBank in await _termBankService.GetAllAsync())
+                CacheTermBank(termBank);
+
+            _hoverMode.Start();
         }
 
-        private void StopServices()
+        private void CacheTermBank(TermBank termBank)
         {
-            IsTermBanksLoaded = false;
-            _hoverMode?.Stop();
-        }
-
-        private void DisplaySearchResults(object _, TextRegion e)
-        {
-            IEnumerable<Term> results = _termSearch.Search(e.Text);
+            _termSearchService.Index(termBank.Title, termBank.Terms);
             
-            _termDisplay.Display(results, e.Bounds);
+            var model = new TermBankViewModel(termBank);
+            TermBanks.Add(model);
+        }
+
+        public void Dispose()
+        {
+            _hoverMode.Dispose();
+            _termDisplayService.Dispose();
         }
     }
 }

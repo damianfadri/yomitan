@@ -3,9 +3,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using Yomitan.Core.Contracts;
 using Yomitan.Core.Helpers;
-using Yomitan.Core.Models.OCR;
-using Yomitan.Core.Services;
+using Yomitan.Core.Models;
 using Yomitan.Shared.Utils;
 
 namespace Yomitan.Service
@@ -69,6 +69,7 @@ namespace Yomitan.Service
             Screen screen = Screen.FromPoint(currentPos);
             using (Bitmap screenshotImage = ScreenshotHelper.Bounds(screen.Bounds))
             {
+
                 Logger.Debug("Detecting text regions...");
                 ImageSource screenshotSource = new ImageSource(screenshotImage);
                 Rectangle detectedRegion = _textDetector.GetRegion(screenshotSource, Cursor.Position);
@@ -77,6 +78,7 @@ namespace Yomitan.Service
                         || detectedRegion.Width == 0 
                         || detectedRegion.Height == 0)
                     return;
+
 
                 Logger.Debug("Cropping image to hovered region...");
                 using (Bitmap croppedImage = ScreenshotHelper.Bounds(screenshotImage, detectedRegion))

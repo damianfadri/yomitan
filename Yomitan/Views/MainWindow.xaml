@@ -1,140 +1,99 @@
 ﻿<Window x:Class="Yomitan.Views.MainWindow"
+        x:Name="MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:conv="clr-namespace:Yomitan.Converter"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="Yomitan"
-        Height="200"
+        Height="400"
         Width="300"
         ResizeMode="NoResize"
         Closing="OnWindowClosing"
         ContentRendered="OnWindowContentRendered">
     <Window.Resources>
         <ResourceDictionary>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            
-            <Style x:Key="ToggleCheckbox" TargetType="{x:Type CheckBox}">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="CheckBox">
-                            <StackPanel Orientation="Horizontal">
-                                <Grid>
-                                    <Border x:Name="Background" 
-                                            Width="30"
-                                            Height="15"
-                                            Background="LightGray"
-                                            CornerRadius="10"></Border>
+            <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <conv:MultiBooleanToVisibilityConverter x:Key="MultiBooleanToVisibilityConverter" />
+            <conv:DragEventArgsConverter x:Key="DragEventArgsConverter" />
 
-                                    <Border x:Name="Button"
-                                            Height="15"
-                                            Width="15"
-                                            Background="Gray"
-                                            CornerRadius="12.5"
-                                            HorizontalAlignment="Left"></Border>
-                                </Grid>
-                                <ContentPresenter x:Name="content"
-                                                  Margin="10,0,0,0"
-                                                  Content="{TemplateBinding Content}"
-                                                  VerticalAlignment="Center" />
-                            </StackPanel>
-                            <ControlTemplate.Resources>
-                                <Storyboard x:Key="right">
-                                    <ThicknessAnimation Storyboard.TargetProperty="Margin"
-                                                        Storyboard.TargetName="Button"
-                                                        Duration="0:0:0.4"
-                                                        From="0,0,0,0"
-                                                        To="15,0,0,0">
-                                        <ThicknessAnimation.EasingFunction>
-                                            <CircleEase EasingMode="EaseOut" />
-                                        </ThicknessAnimation.EasingFunction>
-                                    </ThicknessAnimation>
-                                </Storyboard>
-                                <Storyboard x:Key="left">
-                                    <ThicknessAnimation Storyboard.TargetProperty="Margin"
-                                                        Storyboard.TargetName="Button"
-                                                        Duration="0:0:0.4"
-                                                        From="15,0,0,0"
-                                                        To="0,0,0,0">
-                                        <ThicknessAnimation.EasingFunction>
-                                            <CircleEase EasingMode="EaseOut" />
-                                        </ThicknessAnimation.EasingFunction>
-                                    </ThicknessAnimation>
-                                </Storyboard>
-                            </ControlTemplate.Resources>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked"
-                                         Value="false">
-                                    <Trigger.ExitActions>
-                                        <RemoveStoryboard BeginStoryboardName="leftt"></RemoveStoryboard>
-                                        <BeginStoryboard Storyboard="{StaticResource right}"
-                                                         x:Name="rightt"></BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                    <Setter TargetName="Button"
-                                            Property="Background"
-                                            Value="#757575"></Setter>
-                                </Trigger>
-                                <Trigger Property="IsChecked"
-                                         Value="true">
-                                    <Trigger.ExitActions>
-                                        <RemoveStoryboard BeginStoryboardName="rightt"></RemoveStoryboard>
-                                        <BeginStoryboard Storyboard="{StaticResource left}"
-                                                         x:Name="leftt"></BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                    <Setter TargetName="Background"
-                                            Property="Background"
-                                            Value="#91EBAF" />
-                                    <Setter TargetName="Button"
-                                            Property="Background"
-                                            Value="#20BF55"></Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
+            <DataTemplate x:Key="TermBankContentTemplate">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="5,0"
+                               FontSize="16"
+                               Text="{Binding Title}" />
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="5,0"
+                               FontSize="14"
+                               FontWeight="Light"
+                               Text="{Binding Revision}" />
+                </StackPanel>
+            </DataTemplate>
             <DataTemplate x:Key="TermBankTemplate">
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox Style="{StaticResource ToggleCheckbox}"
-                              IsChecked="True" 
-                              Margin="0,5"/>
-                    <TextBlock 
-                               VerticalAlignment="Center"
-                               Margin="5,0"
-                               Text="{Binding Info.Title}" />
+                    <mah:ToggleSwitch IsOn="{Binding Enabled, Mode=TwoWay}">
+                        <mah:ToggleSwitch.OnContent>
+                            <ContentPresenter ContentTemplate="{StaticResource TermBankContentTemplate}"
+                                              Content="{Binding}" />
+                        </mah:ToggleSwitch.OnContent>
+                        <mah:ToggleSwitch.OffContent>
+                            <ContentPresenter ContentTemplate="{StaticResource TermBankContentTemplate}"
+                                              Content="{Binding}" />
+                        </mah:ToggleSwitch.OffContent>
+                    </mah:ToggleSwitch>
                 </StackPanel>
             </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadTermBanksCommand}" />
+            <i:InvokeCommandAction Command="{Binding InitializeServicesCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid Margin="15">
-        <Grid x:Name="LoadingScreen">
-            <TextBlock VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Text="Loading dictionaries..." />
-        </Grid>
-        <Grid Visibility="{Binding IsTermBanksLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"
-              Background="White">
+        <mah:ProgressRing x:Name="Loading">
+            <mah:ProgressRing.IsActive>
+                <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}">
+                    <Binding Path="InitializeServicesCommand.IsRunning" />
+                    <Binding Path="ImportTermBankCommand.IsRunning" />
+                </MultiBinding>
+            </mah:ProgressRing.IsActive>
+        </mah:ProgressRing>
+        <Grid x:Name="DictionaryGrid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="Dictionaries" Margin="0,5" />
-            <ItemsControl Grid.Row="1" 
-                          DockPanel.Dock="Top" ItemsSource="{Binding TermBanks}"
-                          ItemTemplate="{StaticResource TermBankTemplate}">
-            </ItemsControl>
-            <DockPanel Grid.Row="2" LastChildFill="False">
-                <Button DockPanel.Dock="Right" Content="Import"
-                        Command="{Binding ImportTermBankCommand}"/>
-            </DockPanel>
+            <StackPanel Orientation="Vertical"
+                        Grid.Row="0">
+                <TextBlock 
+                           Text="Dictionaries"
+                           FontSize="24" />
+                <TextBlock Text="Drop dictionary .zip files below to import"
+                           FontWeight="Light" />
+                <TextBlock Text="{Binding InitializeServicesCommand.IsRunning}" />
+            </StackPanel>
+            <StackPanel x:Name="DictionaryListGrid"
+                        Grid.Row="1"
+                        Background="White"
+                        AllowDrop="True"
+                        Visibility="{Binding ElementName=Loading, Path=IsActive, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=1}"
+                        Margin="0,20">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding ImportTermBankCommand}"
+                                               EventArgsConverter="{StaticResource DragEventArgsConverter}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ItemsControl DockPanel.Dock="Top"
+                              ItemsSource="{Binding TermBanks}"
+                              ItemTemplate="{StaticResource TermBankTemplate}">
+                </ItemsControl>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
