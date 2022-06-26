@@ -74,7 +74,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>yomitan.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\yomitan.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -101,6 +101,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Constants\YomitanFilepaths.cs" />
+    <Compile Include="Contracts\IConfigurationService.cs" />
+    <Compile Include="Contracts\IInitializerService.cs" />
     <Compile Include="Contracts\ITagColorService.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\DragEventArgsConverter.cs" />
@@ -116,6 +118,8 @@
     <Compile Include="Repositories\TagColorRepository.cs" />
     <Compile Include="Repositories\TagRepository.cs" />
     <Compile Include="Repositories\TermRepository.cs" />
+    <Compile Include="Services\ConfigurationService.cs" />
+    <Compile Include="Services\InitializerService.cs" />
     <Compile Include="Services\KanjitomoTextDetector.cs" />
     <Compile Include="Services\TagColorService.cs" />
     <Compile Include="Services\TesseractTextRecognizer.cs" />
@@ -190,6 +194,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Assets\deinflect.json" />
+    <EmbeddedResource Include="Assets\tag_colors.json" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -240,7 +246,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="yomitan.ico" />
+    <Resource Include="Assets\yomitan.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

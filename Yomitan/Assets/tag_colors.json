@@ -1,0 +1,12 @@
+[
+    { "category": "default", "color": "#8a8a91" },
+    { "category": "name", "color": "#b6327a" },
+    { "category": "expression", "color": "#f0ad4e" },
+    { "category": "popular", "color": "#0275d8" },
+    { "category": "frequent", "color": "#5bc0de" },
+    { "category": "archaic", "color": "#d9534f" },
+    { "category": "dictionary", "color": "#aa66cc" },
+    { "category": "frequency", "color": "#5cb85c" },
+    { "category": "pos", "color": "#565656" },
+    { "category": "search", "color": "#8a8a91" }
+]
