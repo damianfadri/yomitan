@@ -75,7 +75,6 @@
                            FontSize="24" />
                 <TextBlock Text="Drop dictionary .zip files below to import"
                            FontWeight="Light" />
-                <TextBlock Text="{Binding InitializeServicesCommand.IsRunning}" />
             </StackPanel>
             <StackPanel x:Name="DictionaryListGrid"
                         Grid.Row="1"
