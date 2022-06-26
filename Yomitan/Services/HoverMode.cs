@@ -87,6 +87,8 @@ namespace Yomitan.Service
                     Logger.Debug("Running OCR on hovered region...");
                     ImageSource croppedSource = new ImageSource(paddedImage);
                     TextRegion updatedRegion = _textRecognizer.Read(croppedSource);
+                    if (updatedRegion == null)
+                        return;
 
                     updatedRegion.Bounds = detectedRegion;
 

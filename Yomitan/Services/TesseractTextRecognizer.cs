@@ -8,7 +8,7 @@ namespace Yomitan.Services
 {
     internal class TesseractTextRecognizer : ITextRecognizer
     {
-        private IronTesseract _instance;
+        private readonly IronTesseract _instance;
 
         public TesseractTextRecognizer()
         {
@@ -25,6 +25,8 @@ namespace Yomitan.Services
             {
                 input.TargetDPI = 96;
                 OcrResult result = _instance.Read(input);
+                if (result.Confidence < 80)
+                    return null;
 
                 Rectangle bounds = CalculateBounds(result);
                 return new TextRegion(bounds, result.Text);
