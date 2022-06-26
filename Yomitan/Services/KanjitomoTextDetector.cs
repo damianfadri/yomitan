@@ -34,9 +34,9 @@ namespace Yomitan.Services
             PixelMap visitedMap = null;
             using (Bitmap processedImage = ScreenshotHelper.Bounds(
                     imageSource.Image, cropBounds)
-            //         .Grayscale()
-            //        .Sharpen()
-            //        .Binarize()
+                    .Grayscale()
+                    .Sharpen()
+                    .Binarize()
             )
             {
                 // Boolean map representation of the black and white image.
