@@ -6,7 +6,7 @@ using Yomitan.Contracts;
 
 namespace Yomitan.Services
 {
-    public class ConfigurationService : BaseService, IConfigurationService
+    public class RequiredFilesService : BaseService, IRequiredFilesService
     {
         public async override Task InitializeAsync()
         {
