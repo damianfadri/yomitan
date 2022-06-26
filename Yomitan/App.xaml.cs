@@ -26,6 +26,7 @@ namespace Yomitan
         {
             Ioc.Default.ConfigureServices(
                     new ServiceCollection()
+                    .AddSingleton<IConfigurationService, ConfigurationService>()
                     .AddSingleton<ITagColorService, TagColorService>()
                     .AddSingleton<IRuleBankService, RuleBankService>()
                     .AddSingleton<ITermBankService, TermBankService>()
@@ -33,11 +34,19 @@ namespace Yomitan
                     .AddSingleton<ITermDisplayService, TermDisplayService>()
                     .AddSingleton<ITextDetector, KanjitomoTextDetector>()
                     .AddSingleton<ITextRecognizer, TesseractTextRecognizer>()
+                    .AddSingleton<IInitializerService, InitializerService>()
 
                     .AddTransient<HoverMode>()
                     .AddTransient<MainViewModel>()
                     .AddTransient<SearchResultsViewModel>()
                     .BuildServiceProvider());
+        }
+
+        private async void InitializeServices(object sender, StartupEventArgs e)
+        {
+            var configurationService = Ioc.Default.GetService<IInitializerService>();
+            if (!configurationService.Loaded)
+                await configurationService.InitializeAsync();
         }
     }
 }
