@@ -38,10 +38,16 @@ namespace Yomitan.Core.Helpers
             }
         }
 
-        public static async Task<bool> Exists(string path)
+        public static async Task<bool> ExistsAsync(string path)
         {
             await Task.CompletedTask;
             return File.Exists(path);
+        }
+
+        public static async Task DeleteAsync(string path)
+        {
+            await Task.CompletedTask;
+            File.Delete(path);
         }
     }
 }

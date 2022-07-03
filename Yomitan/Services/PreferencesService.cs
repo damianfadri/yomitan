@@ -26,7 +26,7 @@ namespace Yomitan.Services
 
         public async Task LoadAsync()
         {
-            if (!await FileHelper.Exists(YomitanFilepaths.UserPreferencesFilePath))
+            if (!await FileHelper.ExistsAsync(YomitanFilepaths.UserPreferencesFilePath))
                 await SaveAsync();
 
             string serialized = await FileHelper.ReadAllTextAsync(YomitanFilepaths.UserPreferencesFilePath);
@@ -35,6 +35,9 @@ namespace Yomitan.Services
 
         public async Task SaveAsync()
         {
+            if (await FileHelper.ExistsAsync(YomitanFilepaths.UserPreferencesFilePath))
+                await FileHelper.DeleteAsync(YomitanFilepaths.UserPreferencesFilePath);
+
             string serialized = JsonConvert.SerializeObject(User, new UserPreferencesJsonConverter());
             await FileHelper.WriteAllTextAsync(YomitanFilepaths.UserPreferencesFilePath, serialized);
         }
