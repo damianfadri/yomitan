@@ -18,7 +18,6 @@ namespace Yomitan.ViewModel
         private readonly ITagColorService _tagColorService;
 
         private ObservableCollection<TermModel> _terms;
-        private bool _hasNewTerms;
 
         public ObservableCollection<TermModel> Terms
         {
