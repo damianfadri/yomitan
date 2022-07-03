@@ -39,6 +39,12 @@ namespace Yomitan.Models
 
         private IEnumerable<RubyTextModel> GetSegments(string expression, string reading)
         {
+            if (NihongoHelper.IsKana(expression))
+            {
+                yield return new RubyTextModel(expression);
+                yield break;
+            }
+
             var pattern = new StringBuilder();
             var expressionSegment = NihongoHelper.Segment(expression).ToList();
 
