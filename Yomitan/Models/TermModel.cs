@@ -7,37 +7,37 @@ using System.Text.RegularExpressions;
 using Yomitan.Core.Helpers;
 using Yomitan.Core.Models;
 
-namespace Yomitan.ViewModel
+namespace Yomitan.Models
 {
-    public class TermViewModel
+    public class TermModel
     {
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public IEnumerable<RubyTextViewModel> Expression { get; set; }
-        public IEnumerable<TagViewModel> Tags { get; set; }
-        public IEnumerable<DefinitionViewModel> Definitions { get; set; }
+        public IEnumerable<RubyTextModel> Expression { get; set; }
+        public IEnumerable<TagModel> Tags { get; set; }
+        public IEnumerable<DefinitionModel> Definitions { get; set; }
 
-        public TermViewModel(Term term)
+        public TermModel(Term term)
         {
             Expression = GetSegments(term.Text, term.Reading);
             Tags = GetTags(term.Tags);
             Definitions = GetDefinitions(term.DefinitionEntries);
         }
 
-        private IEnumerable<DefinitionViewModel> GetDefinitions(IEnumerable<DefinitionEntry> definitionEntries)
+        private IEnumerable<DefinitionModel> GetDefinitions(IEnumerable<DefinitionEntry> definitionEntries)
         {
-            return definitionEntries.Select(de => new DefinitionViewModel(de));
+            return definitionEntries.Select(de => new DefinitionModel(de));
         }
 
-        private IEnumerable<TagViewModel> GetTags(IEnumerable<Tag> tags)
+        private IEnumerable<TagModel> GetTags(IEnumerable<Tag> tags)
         {
             return tags.Select(t => {
 
-                return new TagViewModel(t.Name, t.Category);
+                return new TagModel(t.Name, t.Category);
             });
         }
 
-        private IEnumerable<RubyTextViewModel> GetSegments(string expression, string reading)
+        private IEnumerable<RubyTextModel> GetSegments(string expression, string reading)
         {
             var pattern = new StringBuilder();
             var expressionSegment = NihongoHelper.Segment(expression).ToList();
@@ -73,9 +73,9 @@ namespace Yomitan.ViewModel
                 string readingSegment = group.Value;
 
                 if (kanjiSegment.Equals(readingSegment))
-                    yield return new RubyTextViewModel(kanjiSegment);
+                    yield return new RubyTextModel(kanjiSegment);
                 else
-                    yield return new RubyTextViewModel(kanjiSegment, readingSegment);
+                    yield return new RubyTextModel(kanjiSegment, readingSegment);
             }
         }
     }

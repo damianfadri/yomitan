@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using Yomitan.Contracts;
 
-namespace Yomitan.ViewModel
+namespace Yomitan.Models
 {
-    public class TagViewModel
+    public class TagModel
     {
         private const string DefaultTagColor = "#8a8a91";
         private readonly ITagColorService _tagColorService;
@@ -12,7 +12,7 @@ namespace Yomitan.ViewModel
         public string Color { get; set; }
 
 
-        public TagViewModel(string name, string category)
+        public TagModel(string name, string category)
         {
             _tagColorService = Ioc.Default.GetService<ITagColorService>();
 

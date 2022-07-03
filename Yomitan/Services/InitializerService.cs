@@ -9,12 +9,13 @@ namespace Yomitan.Services
     {
         private readonly ICollection<IService> _services;
 
-        public InitializerService(IConfigurationService configurationService, ITagColorService tagColorService)
+        public InitializerService(IRequiredFilesService configurationService, ITagColorService tagColorService, IPreferencesService preferencesService)
         {
             _services = new List<IService>()
             {
                 configurationService,
                 tagColorService,
+                preferencesService,
             };
         }
 

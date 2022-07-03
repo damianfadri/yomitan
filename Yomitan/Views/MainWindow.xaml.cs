@@ -31,10 +31,5 @@ namespace Yomitan.Views
             Left = SystemParameters.WorkArea.Width - Width;
             Top = SystemParameters.WorkArea.Height - Height;
         }
-
-        private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            ViewModel.Dispose();
-        }
     }
 }

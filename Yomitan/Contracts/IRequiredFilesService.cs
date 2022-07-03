@@ -2,7 +2,7 @@
 
 namespace Yomitan.Contracts
 {
-    public interface IConfigurationService : IService
+    public interface IRequiredFilesService : IService
     {
     }
 }

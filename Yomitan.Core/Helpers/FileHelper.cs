@@ -29,6 +29,15 @@ namespace Yomitan.Core.Helpers
             }
         }
 
+        public static async Task WriteAllTextAsync(string filepath, string text)
+        {
+            using (var stream = File.Open(filepath, FileMode.OpenOrCreate))
+            {
+                var bytes = Encoding.UTF8.GetBytes(text);
+                await stream.WriteAsync(bytes, 0, bytes.Length);
+            }
+        }
+
         public static async Task<bool> Exists(string path)
         {
             await Task.CompletedTask;

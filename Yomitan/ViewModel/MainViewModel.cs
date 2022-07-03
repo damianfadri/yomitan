@@ -4,32 +4,36 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Yomitan.Contracts;
 using Yomitan.Core.Contracts;
 using Yomitan.Core.Models;
+using Yomitan.Models;
 using Yomitan.Service;
 
 namespace Yomitan.ViewModel
 {
-    public class MainViewModel : ObservableObject, IDisposable
+    public class MainViewModel : ObservableObject
     {
         private readonly ITermBankService _termBankService;
         private readonly ITermSearchService _termSearchService;
         private readonly ITermDisplayService _termDisplayService;
+        private readonly IPreferencesService _preferencesService;
         private readonly HoverMode _hoverMode;
 
-        private ObservableCollection<TermBankViewModel> _dictionaries;
+        private ObservableCollection<TermBankModel> _dictionaries;
 
-        public ObservableCollection<TermBankViewModel> TermBanks
+        public ObservableCollection<TermBankModel> TermBanks
         {
             get => _dictionaries;
             set => SetProperty(ref _dictionaries, value);
         }
 
         public IAsyncRelayCommand InitializeServicesCommand { get; }
+        public IAsyncRelayCommand DisposeServicesCommand { get; }
         public IAsyncRelayCommand<IEnumerable<string>> ImportTermBankCommand { get; }
-        public IRelayCommand<TermBankViewModel> ToggleTermBankCommand { get; }
+        public IRelayCommand<TermBankModel> ToggleTermBankCommand { get; }
 
-        public MainViewModel(HoverMode hoverMode, ITermBankService termBankService, ITermSearchService termSearchService, ITermDisplayService termDisplayService)
+        public MainViewModel(HoverMode hoverMode, ITermBankService termBankService, ITermSearchService termSearchService, ITermDisplayService termDisplayService, IPreferencesService preferencesService)
         {
             _hoverMode = hoverMode;
             _hoverMode.Hovered += DisplaySearchResults;
@@ -37,11 +41,13 @@ namespace Yomitan.ViewModel
             _termBankService = termBankService;
             _termSearchService = termSearchService;
             _termDisplayService = termDisplayService;
+            _preferencesService = preferencesService;
 
             InitializeServicesCommand = new AsyncRelayCommand(InitializeServicesAsync);
-            ToggleTermBankCommand = new RelayCommand<TermBankViewModel>(ToggleTermBank);
+            DisposeServicesCommand = new AsyncRelayCommand(DisposeAsync);
+            ToggleTermBankCommand = new RelayCommand<TermBankModel>(ToggleTermBank);
             ImportTermBankCommand = new AsyncRelayCommand<IEnumerable<string>>(ImportTermBank);
-            TermBanks = new ObservableCollection<TermBankViewModel>();
+            TermBanks = new ObservableCollection<TermBankModel>();
         }
 
         private void DisplaySearchResults(object sender, TextRegion e)
@@ -59,7 +65,7 @@ namespace Yomitan.ViewModel
             }
         }
 
-        private void ToggleTermBank(TermBankViewModel model)
+        private void ToggleTermBank(TermBankModel model)
         {
             if (model.Enabled)
                 _termSearchService.Disable(model.Title);
@@ -75,6 +81,9 @@ namespace Yomitan.ViewModel
             if (!_termSearchService.Loaded)
                 await _termSearchService.InitializeAsync();
 
+            if (!_preferencesService.Loaded)
+                await _preferencesService.InitializeAsync();
+
             foreach (var termBank in await _termBankService.GetAllAsync())
                 CacheTermBank(termBank);
 
@@ -84,15 +93,25 @@ namespace Yomitan.ViewModel
         private void CacheTermBank(TermBank termBank)
         {
             _termSearchService.Index(termBank.Title, termBank.Terms);
-            
-            var model = new TermBankViewModel(termBank);
+
+            if (!_preferencesService.User.TermBanks.ContainsKey(termBank.Title))
+                _preferencesService.User.TermBanks[termBank.Title] = new TermBankModel(termBank.Title, termBank.Revision, true);
+
+            var model = _preferencesService.User.TermBanks[termBank.Title];
+            if (!model.Enabled)
+                _termSearchService.Disable(termBank.Title);
+
             TermBanks.Add(model);
         }
 
-        public void Dispose()
+        public async Task DisposeAsync()
         {
+            await Task.CompletedTask;
+
             _hoverMode.Dispose();
             _termDisplayService.Dispose();
+            
+            await _preferencesService.SaveAsync();
         }
     }
 }

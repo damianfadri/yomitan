@@ -26,7 +26,8 @@ namespace Yomitan
         {
             Ioc.Default.ConfigureServices(
                     new ServiceCollection()
-                    .AddSingleton<IConfigurationService, ConfigurationService>()
+                    .AddSingleton<IRequiredFilesService, RequiredFilesService>()
+                    .AddSingleton<IPreferencesService, PreferencesService>()
                     .AddSingleton<ITagColorService, TagColorService>()
                     .AddSingleton<IRuleBankService, RuleBankService>()
                     .AddSingleton<ITermBankService, TermBankService>()

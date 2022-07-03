@@ -101,8 +101,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Constants\YomitanFilepaths.cs" />
-    <Compile Include="Contracts\IConfigurationService.cs" />
+    <Compile Include="Contracts\IRequiredFilesService.cs" />
     <Compile Include="Contracts\IInitializerService.cs" />
+    <Compile Include="Contracts\IPreferencesService.cs" />
     <Compile Include="Contracts\ITagColorService.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\DragEventArgsConverter.cs" />
@@ -113,14 +114,16 @@
     <Compile Include="Helpers\BitmapHelper.cs" />
     <Compile Include="Helpers\RectangleHelpers.cs" />
     <Compile Include="Helpers\ScreenshotHelper.cs" />
+    <Compile Include="Models\UserPreferences.cs" />
     <Compile Include="Models\TagColor.cs" />
     <Compile Include="Repositories\RuleRepository.cs" />
     <Compile Include="Repositories\TagColorRepository.cs" />
     <Compile Include="Repositories\TagRepository.cs" />
     <Compile Include="Repositories\TermRepository.cs" />
-    <Compile Include="Services\ConfigurationService.cs" />
+    <Compile Include="Services\RequiredFilesService.cs" />
     <Compile Include="Services\InitializerService.cs" />
     <Compile Include="Services\KanjitomoTextDetector.cs" />
+    <Compile Include="Services\PreferencesService.cs" />
     <Compile Include="Services\TagColorService.cs" />
     <Compile Include="Services\TesseractTextRecognizer.cs" />
     <Compile Include="Services\TermDisplayService.cs" />
@@ -141,13 +144,14 @@
     <Compile Include="Strategies\RuleLoadingStrategy.cs" />
     <Compile Include="Strategies\TagV3LoadingStrategy.cs" />
     <Compile Include="Strategies\TermV3LoadingStrategy.cs" />
-    <Compile Include="ViewModel\DefinitionViewModel.cs" />
-    <Compile Include="ViewModel\RubyTextViewModel.cs" />
-    <Compile Include="ViewModel\TagViewModel.cs" />
-    <Compile Include="ViewModel\TermBankViewModel.cs" />
+    <Compile Include="Strategies\UserPreferencesJsonConverter.cs" />
+    <Compile Include="Models\DefinitionModel.cs" />
+    <Compile Include="Models\RubyTextModel.cs" />
+    <Compile Include="Models\TagModel.cs" />
+    <Compile Include="Models\TermBankModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SearchResultsViewModel.cs" />
-    <Compile Include="ViewModel\TermViewModel.cs" />
+    <Compile Include="Models\TermModel.cs" />
     <Compile Include="Views\SearchResultsWindow.xaml.cs">
       <DependentUpon>SearchResultsWindow.xaml</DependentUpon>
     </Compile>

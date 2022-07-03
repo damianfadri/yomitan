@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Yomitan.Contracts;
 using Yomitan.Core.Models;
+using Yomitan.Models;
 
 namespace Yomitan.ViewModel
 {
@@ -16,10 +17,10 @@ namespace Yomitan.ViewModel
 
         private readonly ITagColorService _tagColorService;
 
-        private ObservableCollection<TermViewModel> _terms;
+        private ObservableCollection<TermModel> _terms;
         private bool _hasNewTerms;
 
-        public ObservableCollection<TermViewModel> Terms
+        public ObservableCollection<TermModel> Terms
         {
             get => _terms;
             private set => SetProperty(ref _terms, value);
@@ -37,7 +38,7 @@ namespace Yomitan.ViewModel
         {
             _tagColorService = tagColorService;
 
-            Terms = new ObservableCollection<TermViewModel>();
+            Terms = new ObservableCollection<TermModel>();
             InitializeServicesCommand = new AsyncRelayCommand(InitializeServices);
         }
 
@@ -50,7 +51,7 @@ namespace Yomitan.ViewModel
         public void LoadTerms(IEnumerable<Term> terms)
         {
             Terms.Clear();
-            foreach (var term in terms.Select(t => new TermViewModel(t)))
+            foreach (var term in terms.Select(t => new TermModel(t)))
                 Terms.Add(term);
 
             HasNewTerms = true;

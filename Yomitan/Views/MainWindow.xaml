@@ -12,7 +12,6 @@
         Height="400"
         Width="300"
         ResizeMode="NoResize"
-        Closing="OnWindowClosing"
         ContentRendered="OnWindowContentRendered">
     <Window.Resources>
         <ResourceDictionary>
@@ -52,6 +51,9 @@
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding InitializeServicesCommand}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding DisposeServicesCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid Margin="15">
