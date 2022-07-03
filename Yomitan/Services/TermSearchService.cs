@@ -11,32 +11,30 @@ namespace Yomitan.Services
     public class TermSearchService : BaseService, ITermSearchService
     {
         private readonly IDictionary<TermKey, TermValues> _terms;
-        private readonly IRuleBankService _ruleBankService;
-        private IEnumerable<Rule> _rules;
+        private readonly IDeinflectionService _deinflectionService;
 
-        public TermSearchService(IRuleBankService ruleBankService)
+        public TermSearchService(IDeinflectionService deinflectionService)
         {
             _terms = new Dictionary<TermKey, TermValues>();
-            _ruleBankService = ruleBankService;
+            _deinflectionService = deinflectionService;
         }
 
         public async override Task InitializeAsync()
         {
-            if (!_ruleBankService.Loaded)
-                await _ruleBankService.InitializeAsync();
+            if (!_deinflectionService.Loaded)
+                await _deinflectionService.InitializeAsync();
 
-            _rules = await _ruleBankService.GetAllAsync();
             await base.InitializeAsync();
         }
 
         public void Index(string key, IEnumerable<Term> terms)
         {
-            TermKey termKey = new TermKey(key);
-            TermValues termValues = new TermValues();
+            var termKey = new TermKey(key);
+            var termValues = new TermValues();
             if (_terms.ContainsKey(termKey))
                 throw new ArgumentException("Dictionary with the same name already exists.");
 
-            foreach (Term term in terms)
+            foreach (var term in terms)
                 termValues.Add(term);
 
             _terms[termKey] = termValues;
@@ -44,7 +42,7 @@ namespace Yomitan.Services
 
         public void Unindex(string key)
         {
-            TermKey foundKey = _terms.Keys.FirstOrDefault(termKey => termKey.Key.Equals(key));
+            var foundKey = _terms.Keys.FirstOrDefault(termKey => termKey.Key.Equals(key));
             if (foundKey == null)
                 throw new ArgumentException("Dictionary to be unindexed is not found.");
 
@@ -53,7 +51,7 @@ namespace Yomitan.Services
 
         public void Enable(string key)
         {
-            TermKey foundKey = _terms.Keys.FirstOrDefault(termKey => termKey.Key.Equals(key));
+            var foundKey = _terms.Keys.FirstOrDefault(termKey => termKey.Key.Equals(key));
             if (foundKey == null)
                 throw new ArgumentException("Dictionary to be enabled is not found.");
 
@@ -62,7 +60,7 @@ namespace Yomitan.Services
 
         public void Disable(string key)
         {
-            TermKey foundKey = _terms.Keys.FirstOrDefault(termKey => termKey.Key.Equals(key));
+            var foundKey = _terms.Keys.FirstOrDefault(termKey => termKey.Key.Equals(key));
             if (foundKey == null)
                 throw new ArgumentException("Dictionary to be disabled is not found.");
 
@@ -71,65 +69,30 @@ namespace Yomitan.Services
 
         public IEnumerable<Term> Search(string text)
         {
-            IList<Term> results = new List<Term>();
+            var results = new List<Term>();
 
             string current = NihongoHelper.ConvertKatakanaToHiragana(text);
             while (current.Length > 0)
             {
-                IEnumerable<Deinflection> deinflections = Deinflect(current);
+                var deinflections = _deinflectionService.Deinflect(current);
+                var currSearchResults = deinflections.SelectMany(deinflection => Get(deinflection.Text));
 
-                IEnumerable<Term> currSearchResults = deinflections.SelectMany(
-                        deinflection => Get(deinflection.Text));
-
-                foreach (Term currSearchResult in currSearchResults)
+                foreach (var currSearchResult in currSearchResults)
                     yield return currSearchResult;
 
                 current = current.Substring(0, current.Length - 1);
             }
         }
 
-        public IEnumerable<Deinflection> Deinflect(string raw)
-        {
-            IList<Deinflection> deinflections = new List<Deinflection>
-            {
-                new Deinflection(raw),
-            };
-
-            for (int i = 0; i < deinflections.Count; i++)
-            {
-                Deinflection current = deinflections[i];
-                foreach (Rule rule in _rules)
-                {
-                    foreach (RuleVariant variant in rule.Variants)
-                    {
-                        if ((current.Rules != RuleType.None && ((current.Rules & variant.RulesIn) == RuleType.None))
-                                || (current.Text.Length - variant.KanaIn.Length + variant.KanaOut.Length) <= 0
-                                || !current.Text.EndsWith(variant.KanaIn))
-                            continue;
-
-                        string updatedTerm = current.Text.Substring(
-                                0, current.Text.Length - variant.KanaIn.Length) + variant.KanaOut;
-
-                        string[] updatedReasons = current.Reasons != null ?
-                                current.Reasons.Append(rule.Name).ToArray() : new string[] { rule.Name };
-
-                        deinflections.Add(new Deinflection(updatedTerm, variant.RulesOut, updatedReasons));
-                    }
-                }
-            }
-
-            return deinflections;
-        }
-
         private IEnumerable<Term> Get(string text)
         {
-            foreach (TermKey key in _terms.Keys)
+            foreach (var key in _terms.Keys)
             {
                 if (!key.Enabled)
                     continue;
 
-                TermValues values = _terms[key];
-                foreach (Term term in values.Get(text))
+                var values = _terms[key];
+                foreach (var term in values.Get(text))
                     yield return term;
             }
         }
@@ -153,7 +116,7 @@ namespace Yomitan.Services
             if (!(obj is TermKey))
                 return false;
 
-            TermKey other = (TermKey)obj;
+            var other = (TermKey)obj;
             return Key.Equals(other.Key);
         }
 
@@ -183,15 +146,14 @@ namespace Yomitan.Services
             if (string.IsNullOrEmpty(key))
                 return;
 
-            IList<Term> savedTerms = null;
-            if (!_terms.TryGetValue(key, out savedTerms))
+            if (!_terms.TryGetValue(key, out IList<Term> savedTerms))
             {
                 savedTerms = new List<Term> { term };
                 _terms[key] = savedTerms;
             }
             else
             {
-                Term savedTerm = savedTerms.FirstOrDefault(t => t.Equals(term));
+                var savedTerm = savedTerms.FirstOrDefault(t => t.Equals(term));
                 if (savedTerm != null)
                     savedTerm.Merge(term);
                 else

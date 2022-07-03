@@ -46,7 +46,7 @@
     <Compile Include="Contracts\ILoadable.cs" />
     <Compile Include="Contracts\ILoadingStrategy.cs" />
     <Compile Include="Contracts\IRepository.cs" />
-    <Compile Include="Contracts\IRuleBankService.cs" />
+    <Compile Include="Contracts\IDeinflectionService.cs" />
     <Compile Include="Contracts\IService.cs" />
     <Compile Include="Contracts\ITermBankService.cs" />
     <Compile Include="Contracts\ITermDisplayService.cs" />

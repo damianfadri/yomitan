@@ -135,7 +135,7 @@
     </Compile>
     <Compile Include="Services\TermSearchService.cs" />
     <Compile Include="Services\BaseService.cs" />
-    <Compile Include="Services\RuleBankService.cs" />
+    <Compile Include="Services\DeinflectionService.cs" />
     <Compile Include="Services\TermBankService.cs" />
     <Compile Include="Models\LoadableTermBank.cs" />
     <Compile Include="Strategies\TagColorLoadingStrategy.cs" />

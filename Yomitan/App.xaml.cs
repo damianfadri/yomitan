@@ -29,7 +29,7 @@ namespace Yomitan
                     .AddSingleton<IRequiredFilesService, RequiredFilesService>()
                     .AddSingleton<IPreferencesService, PreferencesService>()
                     .AddSingleton<ITagColorService, TagColorService>()
-                    .AddSingleton<IRuleBankService, RuleBankService>()
+                    .AddSingleton<IDeinflectionService, DeinflectionService>()
                     .AddSingleton<ITermBankService, TermBankService>()
                     .AddSingleton<ITermSearchService, TermSearchService>()
                     .AddSingleton<ITermDisplayService, TermDisplayService>()
