@@ -26,12 +26,6 @@ namespace Yomitan.ViewModel
             private set => SetProperty(ref _terms, value);
         }
 
-        public bool HasNewTerms
-        {
-            get => _hasNewTerms;
-            set => SetProperty(ref _hasNewTerms, value);
-        }
-
         public IAsyncRelayCommand InitializeServicesCommand { get; }
 
         public SearchResultsViewModel(ITagColorService tagColorService)
@@ -53,8 +47,6 @@ namespace Yomitan.ViewModel
             Terms.Clear();
             foreach (var term in terms.Select(t => new TermModel(t)))
                 Terms.Add(term);
-
-            HasNewTerms = true;
         }
     }
 }
