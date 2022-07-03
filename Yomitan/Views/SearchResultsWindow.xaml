@@ -7,7 +7,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:c="clr-namespace:Yomitan.Component"
         xmlns:conv="clr-namespace:Yomitan.Converter"
-        xmlns:ext="clr-namespace:Yomitan.Extensions"
         mc:Ignorable="d"
         Title="Yomitan"
         Height="250"
@@ -157,8 +156,8 @@
             <i:InvokeCommandAction Command="{Binding InitializeServicesCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  ext:ScrollExtension.AutoScrollToTop="{Binding HasNewTerms, Mode=TwoWay}">
+    <ScrollViewer x:Name="SearchResultsScroll" 
+                  VerticalScrollBarVisibility="Auto">
         <ItemsControl ItemsSource="{Binding Terms}"
                       ItemTemplate="{StaticResource TermTemplate}"
                       Padding="10" />

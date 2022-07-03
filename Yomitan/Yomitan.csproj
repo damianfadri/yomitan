@@ -109,7 +109,6 @@
     <Compile Include="Converter\DragEventArgsConverter.cs" />
     <Compile Include="Converter\ItemIndexConverter.cs" />
     <Compile Include="Converter\MultiBooleanToVisibilityConverter.cs" />
-    <Compile Include="Extensions\ScrollExtension.cs" />
     <Compile Include="Helpers\AsyncHelper.cs" />
     <Compile Include="Helpers\BitmapHelper.cs" />
     <Compile Include="Helpers\RectangleHelpers.cs" />

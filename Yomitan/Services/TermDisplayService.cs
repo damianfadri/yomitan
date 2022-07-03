@@ -17,8 +17,9 @@ namespace Yomitan.Service
             if (_window == null || _window.IsClosed)
                 _window = new SearchResultsWindow();
 
-            // TODO: Wait until InitializeAsync finishes before rendering terms.
             _window.ViewModel.LoadTerms(terms);
+            _window.SearchResultsScroll.ScrollToTop();
+
             if (_window.ViewModel.Terms.Count == 0)
             {
                 _window.Hide();
