@@ -82,18 +82,10 @@ namespace Yomitan.Services
                         deinflection => Get(deinflection.Text));
 
                 foreach (Term currSearchResult in currSearchResults)
-                {
-                    Term savedSearchResult = results.FirstOrDefault(result => result.Equals(currSearchResult));
-                    if (savedSearchResult != null)
-                        savedSearchResult.Merge(currSearchResult);
-                    else
-                        results.Add(currSearchResult);
-                }
+                    yield return currSearchResult;
 
                 current = current.Substring(0, current.Length - 1);
             }
-
-            return results;
         }
 
         public IEnumerable<Deinflection> Deinflect(string raw)
