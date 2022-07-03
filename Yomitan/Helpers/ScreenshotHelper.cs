@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Yomitan.Core.Helpers
@@ -50,6 +51,9 @@ namespace Yomitan.Core.Helpers
 
         public static void ToFile(Image image, string filepath, ImageFormat format)
         {
+            string directoryPath = Path.GetDirectoryName(filepath);
+            Directory.CreateDirectory(directoryPath);
+
             image.Save(filepath, format);
         }
     }

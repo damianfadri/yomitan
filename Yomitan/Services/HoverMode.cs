@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using Yomitan.Constants;
 using Yomitan.Core.Contracts;
 using Yomitan.Core.Helpers;
 using Yomitan.Core.Models;
@@ -84,6 +85,10 @@ namespace Yomitan.Service
                 using (Bitmap croppedImage = ScreenshotHelper.Bounds(screenshotImage, detectedRegion))
                 using (Bitmap paddedImage = croppedImage.Pad(Color.White))
                 {
+                    #if DEBUG
+                    ScreenshotHelper.ToFile(paddedImage, YomitanFilepaths.CroppedImageFilePath);
+                    #endif
+
                     Logger.Debug("Running OCR on hovered region...");
                     ImageSource croppedSource = new ImageSource(paddedImage);
                     TextRegion updatedRegion = _textRecognizer.Read(croppedSource);
