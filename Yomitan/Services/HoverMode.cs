@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using Yomitan.Constants;
 using Yomitan.Core.Contracts;
 using Yomitan.Core.Helpers;
 using Yomitan.Core.Models;

@@ -38,7 +38,7 @@ namespace Yomitan
                     .AddSingleton<ITermSearchService, TermSearchService>()
                     .AddSingleton<ITermDisplayService, TermDisplayService>()
                     .AddSingleton<ITextDetector, KanjitomoTextDetector>()
-                    .AddSingleton<ITextRecognizer, IronOcrTextRecognizer>()
+                    .AddSingleton<ITextRecognizer, TesseractTextRecognizer>()
                     .AddSingleton<IInitializerService, InitializerService>()
 
                     .AddTransient<HoverMode>()
