@@ -5,12 +5,10 @@ using System.Linq;
 using Yomitan.Core.Contracts;
 using Yomitan.Core.Helpers;
 using Yomitan.Core.Models;
-using Yomitan.Helpers;
-using Yomitan.Shared.Utils;
 
-namespace Yomitan.Services
+namespace Yomitan.OCR
 {
-    internal class KanjitomoTextDetector : ITextDetector
+    public class KanjitomoTextDetector : ITextDetector
     {
         // TODO: Refactor to Configuration.
         private static readonly int CROP_BOUNDS_OFFSET = 50;

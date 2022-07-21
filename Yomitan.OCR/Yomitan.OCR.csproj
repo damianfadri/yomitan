@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9B07FE56-867E-4045-A88B-C37195ED9CB4}</ProjectGuid>
+    <ProjectGuid>{674B10D3-B8C2-4241-A626-286C6B6BF25C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Yomitan.Core</RootNamespace>
-    <AssemblyName>Yomitan.Core</AssemblyName>
+    <RootNamespace>Yomitan.OCR</RootNamespace>
+    <AssemblyName>Yomitan.OCR</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -34,7 +34,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,41 +42,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\ILoadable.cs" />
-    <Compile Include="Contracts\ILoadingStrategy.cs" />
-    <Compile Include="Contracts\IRepository.cs" />
-    <Compile Include="Contracts\IDeinflectionService.cs" />
-    <Compile Include="Contracts\IService.cs" />
-    <Compile Include="Contracts\ITermBankService.cs" />
-    <Compile Include="Contracts\ITermDisplayService.cs" />
-    <Compile Include="Contracts\ITermSearchService.cs" />
-    <Compile Include="Contracts\ITextDetector.cs" />
-    <Compile Include="Contracts\ITextRecognizer.cs" />
-    <Compile Include="Helpers\BitmapHelper.cs" />
-    <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="Helpers\NihongoHelper.cs" />
-    <Compile Include="Helpers\RectangleHelpers.cs" />
-    <Compile Include="Helpers\ScreenshotHelper.cs" />
-    <Compile Include="Helpers\StringHelper.cs" />
-    <Compile Include="Models\Definition.cs" />
-    <Compile Include="Models\DefinitionEntry.cs" />
-    <Compile Include="Models\Deinflection.cs" />
-    <Compile Include="Models\ImageSource.cs" />
-    <Compile Include="Models\Rule.cs" />
-    <Compile Include="Models\RuleType.cs" />
-    <Compile Include="Models\RuleVariant.cs" />
-    <Compile Include="Models\Tag.cs" />
-    <Compile Include="Models\Term.cs" />
-    <Compile Include="Models\TermBank.cs" />
-    <Compile Include="Models\TextRegion.cs" />
+    <Compile Include="KanjitomoTextDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IronOcrTextRecognizer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Accord">
-      <Version>3.8.0</Version>
+    <ProjectReference Include="..\Yomitan.Core\Yomitan.Core.csproj">
+      <Project>{9B07FE56-867E-4045-A88B-C37195ED9CB4}</Project>
+      <Name>Yomitan.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="IronOcr">
+      <Version>2022.3.0</Version>
     </PackageReference>
-    <PackageReference Include="Accord.Imaging">
-      <Version>3.8.0</Version>
+    <PackageReference Include="IronOcr.Languages.Japanese">
+      <Version>2020.11.2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

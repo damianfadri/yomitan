@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace Yomitan.Helpers
+namespace Yomitan.Core.Helpers
 {
-    internal static class RectangleHelpers
+    public static class RectangleHelpers
     {
         public static Rectangle Clone(this Rectangle rectangle)
         {

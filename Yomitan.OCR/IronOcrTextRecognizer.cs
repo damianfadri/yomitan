@@ -1,16 +1,16 @@
 ﻿using IronOcr;
 using System.Drawing;
 using Yomitan.Core.Contracts;
+using Yomitan.Core.Helpers;
 using Yomitan.Core.Models;
-using Yomitan.Helpers;
 
-namespace Yomitan.Services
+namespace Yomitan.OCR
 {
-    internal class TesseractTextRecognizer : ITextRecognizer
+    public class IronOcrTextRecognizer : ITextRecognizer
     {
         private readonly IronTesseract _instance;
 
-        public TesseractTextRecognizer()
+        public IronOcrTextRecognizer()
         {
             _instance = new IronTesseract
             {

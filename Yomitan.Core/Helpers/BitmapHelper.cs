@@ -5,8 +5,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 
-namespace Yomitan.Shared.Utils
-{
+namespace Yomitan.Core.Helpers 
+{ 
     public static class BitmapHelper
     {
         public static Bitmap CopyImage(this Bitmap image)
